@@ -2,9 +2,14 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 
 	maelstrom "github.com/jepsen-io/maelstrom/demo/go"
+)
+
+var (
+	id = 0
 )
 
 func main() {
@@ -21,6 +26,19 @@ func main() {
 		body["type"] = "echo_ok"
 
 		// Echo the original message back with the updated message type.
+		return node.Reply(msg, body)
+	})
+
+	node.Handle("generate", func(msg maelstrom.Message) error {
+		var body map[string]any
+		if err := json.Unmarshal(msg.Body, &body); err != nil {
+			return err
+		}
+
+		body["type"] = "generate_ok"
+		body["id"] = fmt.Sprintf("%s-%d", node.ID(), id)
+		id++
+
 		return node.Reply(msg, body)
 	})
 
