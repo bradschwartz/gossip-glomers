@@ -22,4 +22,11 @@ download directory, run the various test commands:
     --availability total \
     --nemesis partition \
     --bin ~/code/bradschwartz/gossip-glomers/gossip-glomers
+
+# 3) RPC broadcast/read/topology
+./maelstrom test -w broadcast \
+    --node-count 1 \
+    --time-limit 20 \
+    --rate 10 \
+    --bin ~/code/bradschwartz/gossip-glomers/gossip-glomers
 ```
