@@ -9,9 +9,18 @@ import (
 )
 
 var (
-	id       = 0
-	messages = make(map[float64]any)
+	id        = 0
+	messages  = make(map[float64]any)
+	neighbors = []string{}
 )
+
+func seenMessages() []float64 {
+	keys := make([]float64, 0, len(messages))
+	for k := range messages {
+		keys = append(keys, k)
+	}
+	return keys
+}
 
 func main() {
 	node := maelstrom.NewNode()
@@ -60,11 +69,7 @@ func main() {
 		// Don't even bother serializing the message body since we don't use it.
 		body := map[string]any{}
 		body["type"] = "read_ok"
-		keys := make([]float64, 0, len(messages))
-		for k := range messages {
-			keys = append(keys, k)
-		}
-		body["messages"] = keys
+		body["messages"] = seenMessages()
 
 		return node.Reply(msg, body)
 	})
